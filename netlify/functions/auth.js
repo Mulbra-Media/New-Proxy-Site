@@ -11,10 +11,10 @@ const corsHeaders = (origin) => ({
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
 });
 
-const siteURL = process.env.URL || ""; // e.g. https://your-oauth-site.netlify.app
-const clientId = process.env.GITHUB_CLIENT_ID;
-const clientSecret = process.env.GITHUB_CLIENT_SECRET;
-const redirectUri = siteURL ? `${siteURL}/callback` : "";
+const siteURL = process.env.URL || ""; // Netlify-provided
+const explicitRedirect = process.env.OAUTH_REDIRECT_URI; // we'll add this env var
+const redirectUri = explicitRedirect || (siteURL ? `${siteURL.replace(/\/$/, "")}/callback` : "");
+
 
 export async function handler(event) {
   const origin = event.headers.origin || "";
